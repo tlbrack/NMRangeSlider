@@ -65,6 +65,8 @@
     
     _lowerValue = 0.0;
     _upperValue = 1.0;
+    _lowerValueLimit = _lowerValue;
+    _upperValueLimit = _upperValue;
 }
 
 // ------------------------------------------------------------------------------------------------------
@@ -443,6 +445,7 @@
         //get new lower value based on the touch location.
         //This is automatically contained within a valid range.
         float newValue = [self lowerValueForCenterX:(touchPoint.x - _lowerTouchOffset)];
+        newValue = MAX(_lowerValueLimit, newValue);
         
         //if both upper and lower is selected, then the new value must be LOWER
         //otherwise the touch event is ignored.
@@ -462,6 +465,7 @@
     if(_upperHandle.highlighted )
     {
         float newValue = [self upperValueForCenterX:(touchPoint.x - _upperTouchOffset)];
+        newValue = MIN(_upperValueLimit, newValue);
 
         //if both upper and lower is selected, then the new value must be HIGHER
         //otherwise the touch event is ignored.
