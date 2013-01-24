@@ -37,6 +37,12 @@
 // default 1.0. this value will be pinned to min/max
 @property(assign, nonatomic) float upperValue;
 
+// default 0.0. this value cannot be dragged 'below'
+@property(assign, nonatomic) float lowerValueLimit;
+
+// default 1.0. this value cannot be dragged 'above'
+@property(assign, nonatomic) float upperValueLimit;
+
 // center location for the lower handle control
 @property(readonly, nonatomic) CGPoint lowerCenter;
 

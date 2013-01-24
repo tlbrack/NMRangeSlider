@@ -187,6 +187,9 @@
     self.steppedContinuouslySlider.stepValue = 0.2;
     self.steppedContinuouslySlider.stepValueContinuously = YES;
     
+    // uncomment to test limits
+    //self.steppedContinuouslySlider.lowerValueLimit = 0.2;
+    //self.steppedContinuouslySlider.upperValueLimit = 0.8;
 }
 
 // ------------------------------------------------------------------------------------------------------
