@@ -93,10 +93,29 @@
         value = roundf(value / _stepValueInternal) * _stepValueInternal;
     }
     
-    value = MAX(value, _minimumValue);
+    value = MAX(value, MAX(_minimumValue, _lowerValueLimit));
     value = MIN(value, _upperValue - _minimumRange);
     
     _lowerValue = value;
+    
+    [self setNeedsLayout];
+}
+
+- (void) setLowerValueLimit:(float)lowerValueLimit {
+    
+    if (lowerValueLimit == _lowerValueLimit)
+        return;
+    
+    float value = lowerValueLimit;
+    
+    if(_stepValueInternal>0)
+    {
+        value = roundf(value / _stepValueInternal) * _stepValueInternal;
+    }
+    
+    value = MAX(_minimumValue, value);
+    _lowerValueLimit = value;
+    [self setLowerValue:MAX(_lowerValueLimit, _lowerValue)];
     
     [self setNeedsLayout];
 }
@@ -110,11 +129,30 @@
         value = roundf(value / _stepValueInternal) * _stepValueInternal;
     }
 
-    value = MIN(value, _maximumValue);
+    value = MIN(value, MIN(_maximumValue, _upperValueLimit));
     value = MAX(value, _lowerValue+_minimumRange);
     
     _upperValue = value;
 
+    [self setNeedsLayout];
+}
+
+- (void) setUpperValueLimit:(float)upperValueLimit {
+    
+    if (upperValueLimit == _upperValueLimit)
+        return;
+    
+    float value = upperValueLimit;
+    
+    if(_stepValueInternal>0)
+    {
+        value = roundf(value / _stepValueInternal) * _stepValueInternal;
+    }
+    
+    value = MIN(_maximumValue, value);
+    _upperValueLimit = value;
+    [self setUpperValue:MIN(_upperValueLimit, _upperValue)];
+    
     [self setNeedsLayout];
 }
 
@@ -158,6 +196,47 @@
         setValuesBlock();
     }
 
+}
+
+- (void) setUpperValue:(float) upperValue lowerValue:(float) lowerValue animated:(BOOL)animated
+{
+    if((!animated) && (isnan(lowerValue) || lowerValue==_lowerValue) && (isnan(upperValue) || upperValue==_upperValue))
+    {
+        //nothing to set
+        return;
+    }
+    
+    __block void (^setValuesBlock)(void) = ^ {
+        
+        if(!isnan(upperValue))
+        {
+            [self setUpperValue:upperValue];
+        }
+        if(!isnan(lowerValue))
+        {
+            [self setLowerValue:lowerValue];
+        }
+        
+    };
+    
+    if(animated)
+    {
+        [UIView animateWithDuration:0.25  delay:0.0 options:UIViewAnimationOptionBeginFromCurrentState
+                         animations:^{
+                             
+                             setValuesBlock();
+                             [self layoutSubviews];
+                             
+                         } completion:^(BOOL finished) {
+                             
+                         }];
+        
+    }
+    else
+    {
+        setValuesBlock();
+    }
+    
 }
 
 - (void)setLowerValue:(float)lowerValue animated:(BOOL) animated

@@ -75,4 +75,7 @@
 
 - (void) setLowerValue:(float) lowerValue upperValue:(float) upperValue animated:(BOOL)animated;
 
+// allows entire range to shift if lower value moves to far right.
+- (void) setUpperValue:(float) upperValue lowerValue:(float) lowerValue animated:(BOOL)animated;
+
 @end
