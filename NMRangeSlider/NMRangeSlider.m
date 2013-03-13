@@ -589,6 +589,7 @@
     }
     
     [self sendActionsForControlEvents:UIControlEventValueChanged];
+    [self sendActionsForControlEvents:UIControlEventTouchUpInside];
 }
 
 @end
